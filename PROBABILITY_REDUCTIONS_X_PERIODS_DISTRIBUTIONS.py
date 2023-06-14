@@ -80,79 +80,55 @@ for dist, dist_obj in dist_dict.items():
 warnings.resetwarnings()
     
 # Correlaciones de las distribuciones con los datos
-correlations = {}
-print('\nCorrelaciones con los datos originales:')
-for dist in results.keys():
-    correlations[dist] = results['direct']['pct_days'].corr(results[dist]['pct_days'])
-    print(f'Distribución {dist} =  {correlations[dist]}')
-
-correlations_df = pd.DataFrame(columns=['Distribution', 'Correlation', 'Execution_Time']) 
+correlations_df_global = pd.DataFrame(columns=['Distribution', 'Correlation', 'Execution_Time']) 
 times['direct'] = 0
 for dist in results.keys():
     correl = results['direct']['pct_days'].corr(results[dist]['pct_days'])
-    correlations_df.loc[len(correlations_df)] = [dist, correl,times[dist]]
+    correlations_df_global.loc[len(correlations_df_global)] = [dist, correl,times[dist]]
 
-correlations_df = correlations_df.sort_values(by='Correlation', ascending=False)
-correlations_df.reset_index(drop=True, inplace=True)
-print(correlations_df)
+correlations_df_global = correlations_df_global.sort_values(by='Correlation', ascending=False)
+correlations_df_global.reset_index(drop=True, inplace=True)
+print(correlations_df_global)
 
-
-# HISTOGRAMA BASICO
-period_graph = 160
-
-variacion_diaria = df[f'{period_graph}d_pct_change'].dropna()
-# Crear el histograma
-plt.hist(variacion_diaria, bins=(max(pct_below)-min(pct_below)),density=True, alpha=0.5, label='Histograma')  # Ajusta el número de bins según tus preferencias
-# Generar curva de distribución normal
-x = np.linspace(min(variacion_diaria), max(variacion_diaria), 100)
-y = stats.norm.pdf(x,* params['p_norm'][f'params_{period_graph}d'])
-plt.plot(x, y, color='red', label='Distribución Normal')
-# Generar curva de distribución Johnsonsu
-x2 = np.linspace(min(variacion_diaria), max(variacion_diaria), 100)
-y2 = stats.johnsonsu.pdf(x,* params['p_johnsonsu'][f'params_{period_graph}d'])
-plt.plot(x2, y2, color='blue', label='Distribución Johnsonsu')
-# Personalizar el histograma
-plt.title(f'Histograma de Variación en {period_graph} sessiones')
-plt.xlabel('% de Variación en el periodo')
-plt.ylabel('Frecuencia')
-plt.legend()
-plt.show()
+#Correlaciones de las distribuciones de datos por periodos
+columns = ['Distribution'] + [f'corr_{num}session' for num in periods]
+correlations_df_periods = pd.DataFrame(columns=columns)
+c = 0
+for dist in results.keys():
+    correlations_df_periods.loc[c, 'Distribution'] = dist
+    for period in periods:
+        a = results['direct'].loc[results['direct']['period'] == period, 'pct_days']
+        b = results[dist].loc[results[dist]['period'] == period, 'pct_days']
+        correl = a.corr(b)
+        col = f'corr_{period}session'
+        correlations_df_periods.loc[c, col] = correl  
+    c = c+1
 
 
-
-'''
-# Lista de colores para las distribuciones
-colors = ['blue', 'red', 'green', 'orange', 'purple', 'brown', 'pink', 'gray', 'olive']
-
-# Crear el gráfico
-for i, period in enumerate(periods):
-    # Obtener los datos de 'pct_days' y 'pct_below' para el período actual
-    data = results[results['period'] == period]
-    x = data['pct_below']
-    y = data['pct_days']
-
-    # Crear la figura y los ejes
-    fig, ax = plt.subplots()
-
-    # Histograma de los datos de 'pct_days' obtenidos con el cálculo directo
-    ax.hist(y, bins=20, density=True, alpha=0.5, color='lightblue', label='Cálculo directo')
-
-    # Curvas de las distribuciones calculadas
-    for j, dist_name in enumerate(['norm', 'john', 'lognorm', 'student', 'exp', 'logistic', 'pareto', 'laplace', 'cauchy']):
-        dist_results = eval('results_' + dist_name)
-        dist_data = dist_results[dist_results['period'] == period]
-        dist_pct_days = dist_data['pct_days']
-        ax.plot(x, dist_pct_days, color=colors[j], label=dist_name.capitalize())
-
-    # Configuraciones adicionales del gráfico
-    ax.set_title(f'Period: {period} days')
-    ax.set_xlabel('Percentage Below')
-    ax.set_ylabel('Percentage of Days')
-    ax.legend()
-
-    # Mostrar el gráfico
+# HISTOGRAMAS CON DISTRIBUCIONES POR PERIODOS
+for period in periods:
+    period_graph = period
+    variacion_diaria = df[f'{period_graph}d_pct_change'].dropna()
+    # Figura en cada iteracion
+    fig = plt.figure()
+    # Crear el histograma
+    plt.hist(variacion_diaria, bins=(max(pct_below)-min(pct_below)),density=True, alpha=0.5, label='Histograma')  # Ajusta el número de bins según tus preferencias
+    # Generar curva de distribución normal
+    x = np.linspace(min(variacion_diaria), max(variacion_diaria), 100)
+    y = stats.norm.pdf(x,* params['p_norm'][f'params_{period_graph}d'])
+    plt.plot(x, y, color='red', label='Distribución Normal')
+    # Generar curva de distribución Johnsonsu
+    y2 = stats.johnsonsu.pdf(x,* params['p_johnsonsu'][f'params_{period_graph}d'])
+    plt.plot(x, y2, color='blue', label='Distribución Johnsonsu')
+    # Personalizar el histograma
+    plt.title(f'Histograma de Variación en {period_graph} sessiones')
+    plt.xlabel('% de Variación en el periodo')
+    plt.ylabel('Frecuencia')
+    plt.legend()
     plt.show()
-'''
+
+
+
 
 
 
