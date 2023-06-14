@@ -7,18 +7,20 @@ import yfinance as yf
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
 from scipy import stats
 import warnings
 import time
 
 
-dist_list_stats = stats._continuous_distns._distn_names
-dist_list_obj = [getattr(stats, dist) for dist in dist_list_stats]
+
 # Lista de las distribuciones a calcular (los nombres de scipy.stats)
 # distributions = [stats.norm, stats.johnsonsu, stats.lognorm, stats.t, stats.expon, stats.logistic, stats.pareto, stats.laplace, stats.cauchy]
+# Para todas las distribuciones de scipy.stats
+dist_list_stats = stats._continuous_distns._distn_names
+dist_list_obj = [getattr(stats, dist) for dist in dist_list_stats]
 distributions = dist_list_obj
 dist_dict = dict(zip([dist.name for dist in distributions], distributions))
+
 
 # Introducir valores para los cálculos
 ticker = ['^NDX'] # '^GSPC' '^STOXX50E' '^GDAXI'  '^GSPC' '^IXIC'  '^DJI' ... 'SPY' 'AAPL' 'TSLA' ...
