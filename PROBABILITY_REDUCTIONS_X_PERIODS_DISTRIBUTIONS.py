@@ -21,7 +21,7 @@ distributions = dist_list_obj
 dist_dict = dict(zip([dist.name for dist in distributions], distributions))
 
 # Introducir valores para los cálculos
-ticker = ['^GSPC'] # '^GSPC' '^STOXX50E' '^GDAXI'  '^GSPC' '^IXIC'  '^DJI' ... 'SPY' 'AAPL' 'TSLA' ...
+ticker = ['^NDX'] # '^GSPC' '^STOXX50E' '^GDAXI'  '^GSPC' '^IXIC'  '^DJI' ... 'SPY' 'AAPL' 'TSLA' ...
 start_date = '2000-01-01'
 end_date = '2023-03-26'
 
