@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-COMPARATIVA DE CALCULO DE PROBABILIDADES DE RENDIMIENTOS OPBTENIDOS POR PERIODOS DE TIEMPO UTILIZANDO DIFERENTES DISTRIBUCIONES
+COMPARATIVA DE CALCULO DE PROBABILIDADES DE RENDIMIENTOS OBTENIDOS POR PERIODOS DE TIEMPO UTILIZANDO DIFERENTES DISTRIBUCIONES
 """
 
 import yfinance as yf
@@ -103,7 +103,7 @@ for dist in results.keys():
         col = f'corr_{period}session'
         correlations_df_periods.loc[c, col] = correl  
     c = c+1
-
+print(correlations_df_periods)
 
 # HISTOGRAMAS CON DISTRIBUCIONES POR PERIODOS
 for period in periods:

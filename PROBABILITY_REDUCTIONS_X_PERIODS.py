@@ -18,7 +18,7 @@ tickers = ['^SPX', '^NDX'] # '^STOXX50E', '^GDAXI', '^GSPC', '^IXIC', '^DJI',...
 start_date = '2000-01-01'
 end_date = '2023-03-26'
 periods = [1, 2] + list(range(5,41,5)) + list(range(60,221,20))
-pct_below = list(range(-40,40,2))
+pct_below = list(range(-40,42,2))
 pct_below.reverse()
 
 for ticker in tickers:
