@@ -18,7 +18,7 @@ tickers = ['^SPX'] # '^STOXX50E', '^GDAXI', '^GSPC', '^IXIC', '^DJI',... SPY, AA
 start_date = '2000-01-01'
 end_date = '2023-03-26'
 periods = [1, 2] + list(range(5,41,5)) + list(range(60,221,20))
-pct_below = list(range(-30,31,2))
+pct_below = list(range(-30,30,2))
 pct_below.reverse()
 
 
@@ -36,9 +36,9 @@ for ticker in tickers:
 
 # Calculo por distribución normal
 results_norm = pd.DataFrame(columns=['ticker', 'period', 'pct_below', 'pct_days'])
-print('Calculating normal')
 for ticker in tickers:
     df = pd.DataFrame(yf.download(ticker, start=start_date, end=end_date)['Close'])
+    print('Calculating normal')
     for period in periods:
         # Calcula el cambio porcentual del cierre respecto al cierre anterior
         df[f'{period}d_pct_change'] = df['Close'].pct_change(periods=period).mul(100)
@@ -51,9 +51,9 @@ for ticker in tickers:
 
 # Calculo por Johnson Su
 results_john = pd.DataFrame(columns=['ticker', 'period', 'pct_below', 'pct_days'])
-print('Calculating Johnson Su')
 for ticker in tickers:
     df = pd.DataFrame(yf.download(ticker, start=start_date, end=end_date)['Close'])
+    print('Calculating Johnson Su')
     for period in periods:
         df[f'{period}d_pct_change'] = df['Close'].pct_change(periods=period).mul(100)
         for pct in pct_below:
@@ -65,7 +65,7 @@ for ticker in tickers:
 
 
   
-# Crear un mapa de calor para cada ticker
+# Crear un mapa de calor para cada ticker. Calculo directo
 for ticker in results['ticker'].unique():
     data = results[results['ticker'] == ticker]
     heatmap_data = pd.pivot_table(data, values='pct_days', index='pct_below', columns='period', sort = False)
@@ -80,7 +80,7 @@ for ticker in results['ticker'].unique():
               
     plt.show()
 
-# Crear un mapa de calor para cada ticker
+# Crear un mapa de calor para cada ticker. Calculo Distribucion Normal
 for ticker in results_norm['ticker'].unique():
     data = results_norm[results_norm['ticker'] == ticker]
     heatmap_data = pd.pivot_table(data, values='pct_days', index='pct_below', columns='period', sort = False)
@@ -95,7 +95,7 @@ for ticker in results_norm['ticker'].unique():
               
     plt.show()
 
-# Crear un mapa de calor para cada ticker
+# Crear un mapa de calor para cada ticker. Calculo Distribucion Johnson Su
 for ticker in results_john['ticker'].unique():
     data = results_john[results_john['ticker'] == ticker]
     heatmap_data = pd.pivot_table(data, values='pct_days', index='pct_below', columns='period', sort = False)
