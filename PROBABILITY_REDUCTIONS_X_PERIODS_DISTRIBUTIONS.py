@@ -8,6 +8,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
+from statsmodels.tsa.stattools import coint
 import warnings
 import time
 
@@ -82,11 +83,12 @@ for dist, dist_obj in dist_dict.items():
 warnings.resetwarnings()
     
 # Correlaciones de las distribuciones con los datos
-correlations_df_global = pd.DataFrame(columns=['Distribution', 'Correlation', 'Execution_Time']) 
+correlations_df_global = pd.DataFrame(columns=['Distribution', 'Correlation', 'Execution_Time', 'Cointegration_%', 'Cointegration_pvalor', 'Cointegration_t']) 
 times['direct'] = 0
 for dist in results.keys():
     correl = results['direct']['pct_days'].corr(results[dist]['pct_days'])
-    correlations_df_global.loc[len(correlations_df_global)] = [dist, correl,times[dist]]
+    cointeg = coint(results['direct']['pct_days'], results[dist]['pct_days'])
+    correlations_df_global.loc[len(correlations_df_global)] = [dist, correl,times[dist], (100-cointeg[1]) ,cointeg[1], cointeg[0]]
 
 correlations_df_global = correlations_df_global.sort_values(by='Correlation', ascending=False)
 correlations_df_global.reset_index(drop=True, inplace=True)
