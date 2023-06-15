@@ -45,7 +45,7 @@ for period in periods:
 results = {}
 results['direct'] = pd.DataFrame(columns=['ticker', 'period', 'pct_below', 'pct_days'])
 for dist in dist_dict.keys():
-     results[dist] = pd.DataFrame(columns=['ticker', 'period', 'pct_below', 'pct_days'])   
+    results[dist] = pd.DataFrame(columns=['ticker', 'period', 'pct_below', 'pct_days'])   
     
 # Calculo directo sobre datos
 print('Calculating direct calc')
@@ -72,10 +72,10 @@ for dist, dist_obj in dist_dict.items():
                 pct_days = dist_obj.cdf(pct, * params[f'p_{dist}'][f'params_{period}d']) * 100
                 results[dist].loc[len(results[dist])] = [ticker, period, pct, pct_days]    
     except Exception as e:
-            print(f"Error occurred for {dist}: {e}")
-            fails.append(dist)
-            del results[dist]
-            continue   
+        print(f"Error occurred for {dist}: {e}")
+        fails.append(dist)
+        del results[dist]
+        continue   
     end_time= time.time()
     execution_time = end_time - start_time  # Duración de la iteración en segundos
     times[dist] = execution_time 
