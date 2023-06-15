@@ -10,8 +10,7 @@ import matplotlib.pyplot as plt
 from scipy import stats
 from statsmodels.tsa.stattools import coint
 import warnings
-import time 
-
+import time
 
 
 # Lista de las distribuciones a calcular (los nombres de scipy.stats)
@@ -21,7 +20,6 @@ dist_list_stats = stats._continuous_distns._distn_names
 dist_list_obj = [getattr(stats, dist) for dist in dist_list_stats]
 distributions = dist_list_obj
 dist_dict = dict(zip([dist.name for dist in distributions], distributions))
-
 
 # Introducir valores para los cálculos
 ticker = ['^NDX'] # '^GSPC' '^STOXX50E' '^GDAXI'  '^GSPC' '^IXIC'  '^DJI' ... 'SPY' 'AAPL' 'TSLA' ...
@@ -82,7 +80,7 @@ for dist, dist_obj in dist_dict.items():
     times[dist] = execution_time 
 warnings.resetwarnings()
     
-# Correlaciones de las distribuciones con los datos
+# Correlaciones y cointegraciones de las distribuciones con los datos
 correlations_df_global = pd.DataFrame(columns=['Distribution', 'Correlation', 'Execution_Time', 'Cointegration_%', 'Cointegration_pvalor', 'Cointegration_t']) 
 times['direct'] = 0
 for dist in results.keys():
