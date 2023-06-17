@@ -14,11 +14,11 @@ import seaborn as sns
 from scipy.stats import norm, johnsonsu
 
 # Introducir valores para los cálculos (puede ser una lista de tickers)
-tickers = ['^SPX', '^NDX'] # '^STOXX50E', '^GDAXI', '^GSPC', '^IXIC', '^DJI',... SPY, AAPL, ...
-start_date = '2000-01-01'
+tickers = ['^SPX'] # '^STOXX50E', '^GDAXI', '^GSPC', '^IXIC', '^DJI',... SPY, AAPL, ...
+start_date = '1920-01-01'
 end_date = '2023-03-26'
 periods = [1, 2] + list(range(5,41,5)) + list(range(60,221,20))
-pct_below = list(range(-40,42,2))
+pct_below = list(range(-40,40,2))
 pct_below.reverse()
 
 for ticker in tickers:
