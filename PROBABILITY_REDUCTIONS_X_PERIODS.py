@@ -15,7 +15,7 @@ from scipy.stats import norm, johnsonsu
 
 # Introducir valores para los cálculos (puede ser una lista de tickers)
 tickers = ['^SPX'] # '^STOXX50E', '^GDAXI', '^GSPC', '^IXIC', '^DJI',... SPY, AAPL, ...
-start_date = '1900-01-01'
+start_date = '1950-01-01'
 end_date = '2023-03-26'
 periods = [1, 2] + list(range(5,41,5)) + list(range(60,221,20))
 pct_below = list(range(-20,21,1))

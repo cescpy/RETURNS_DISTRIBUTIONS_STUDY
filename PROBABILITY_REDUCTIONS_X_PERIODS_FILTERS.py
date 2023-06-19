@@ -15,13 +15,15 @@ from scipy.stats import norm, johnsonsu
 
 # Introducir valores para los cálculos
 ticker = '^SPX'
-start_date = '1990-01-01'
+start_date = '2000-01-01'
 end_date = '2023-06-15'
-periods = [1, 2] + list(range(5,41,5)) + list(range(60,221,20))
-pct_below = list(range(-20,21,1))
+# periods = [1, 2] + list(range(5,41,5)) + list(range(60,221,20))
+periods = [1, 2, 3, 4, 5, 10, 15]
+# pct_below = list(range(-20,21,1))
+pct_below_t = list(range(-30,22,1))
+pct_below = [value / 5 for value in pct_below_t]
 pct_below.reverse()
-
-filtro_VIX = ('inf', 20)
+filtro_VIX = (25, 35)
 
 df = pd.DataFrame(yf.download([ticker, '^VIX'], start=start_date, end=end_date)['Close'])
 
@@ -29,10 +31,8 @@ df = pd.DataFrame(yf.download([ticker, '^VIX'], start=start_date, end=end_date)[
 for period in periods:
     df[f'{period}d_pct_change'] = df[ticker].pct_change(periods=period).mul(100)
 
-if filtro_VIX[0] == 'sup':
-    df_filter = df[df['^VIX'] > filtro_VIX[1]]
-if filtro_VIX[0] == 'inf':
-    df_filter = df[df['^VIX'] < filtro_VIX[1]]
+
+df_filter = df[(df['^VIX'].shift(1) > filtro_VIX[0]) & (df['^VIX'].shift(1) < filtro_VIX[1])]
 
 # Calculo directo sobre datos
 results = pd.DataFrame(columns=['ticker', 'period', 'pct_below', 'pct_days'])
@@ -75,7 +75,7 @@ sns.heatmap(heatmap_data, cmap= 'YlGnBu', annot=True, fmt=".2f", annot_kws={"fon
 
 plt.xlabel('Nº de sesiones', fontsize=20) 
 plt.ylabel('Probabilidad rendimiento inferior a\n\n %', fontsize=16)
-plt.title(f'{ticker} -  Datos históricos ente {start_date} y {end_date} - Direct calc\n Filtro VIX: {filtro_VIX}', fontsize=24)
+plt.title(f'{ticker} -  Datos históricos ente {start_date} y {end_date} - Direct calc\n Filtro VIX entre {filtro_VIX[0]} y {filtro_VIX[1]}', fontsize=24)
           
 plt.show()
 
