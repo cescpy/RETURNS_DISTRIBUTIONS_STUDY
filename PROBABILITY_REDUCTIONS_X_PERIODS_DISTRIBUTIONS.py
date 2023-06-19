@@ -14,7 +14,7 @@ import time
 
 
 # Lista de las distribuciones a calcular (los nombres de scipy.stats)
-# distributions = [stats.norm, stats.johnsonsu, stats.lognorm, stats.t, stats.expon, stats.logistic, stats.pareto, stats.laplace, stats.cauchy]
+# distributions = [stats.norm, stats.johnsonsu, stats.lognorm, stats.t, stats.expon, stats.logistic, stats.laplace]
 # Para todas las distribuciones de scipy.stats
 dist_list_stats = stats._continuous_distns._distn_names
 dist_list_obj = [getattr(stats, dist) for dist in dist_list_stats]
@@ -22,9 +22,9 @@ distributions = dist_list_obj
 dist_dict = dict(zip([dist.name for dist in distributions], distributions))
 
 # Introducir valores para los cálculos
-ticker = ['^NDX'] # '^GSPC' '^STOXX50E' '^GDAXI'  '^GSPC' '^IXIC'  '^DJI' ... 'SPY' 'AAPL' 'TSLA' ...
+ticker = ['^SPX'] # '^GSPC' '^STOXX50E' '^GDAXI'  '^GSPC' '^IXIC'  '^DJI' ... 'SPY' 'AAPL' 'TSLA' ...
 start_date = '2000-01-01'
-end_date = '2023-03-26'
+end_date = '2023-06-15'
 
 # Periodos a calcular (rango de sesiones)
 periods = [1, 2, 3, 4] + list(range(5,41,5)) + list(range(60,221,20))
